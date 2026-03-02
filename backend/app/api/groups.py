@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Query
 
 from app.core.scheduler import get_latest_containers, get_latest_health_checks
-from app.data.container_registry import CONTAINERS
+from app.data.container_registry import CONTAINER_REGISTRY
 from app.services.history_service import get_group_metrics_history
 
 router = APIRouter()
@@ -9,7 +9,7 @@ router = APIRouter()
 
 @router.get("/groups/{group}/summary")
 async def group_summary(group: str):
-    group_container_names = {c.name for c in CONTAINERS if c.group == group}
+    group_container_names = {c.name for c in CONTAINER_REGISTRY if c.group == group}
 
     containers = get_latest_containers()
     health_checks = get_latest_health_checks()

@@ -239,9 +239,9 @@ async def get_group_metrics_history(
     end: str | None = None,
     interval: str | None = None,
 ) -> dict:
-    from app.data.container_registry import CONTAINERS
+    from app.data.container_registry import CONTAINER_REGISTRY
 
-    group_containers = [c.name for c in CONTAINERS if c.group == group]
+    group_containers = [c.name for c in CONTAINER_REGISTRY if c.group == group]
     if not group_containers:
         return {"group": group, "start": "", "end": "", "interval": "", "data": []}
 
