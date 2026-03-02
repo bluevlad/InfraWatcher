@@ -1,0 +1,21 @@
+# FastAPI & Server
+fastapi==0.115.0
+uvicorn[standard]==0.32.0
+
+# Docker SDK
+docker==7.1.0
+
+# System Metrics
+psutil==5.9.8
+
+# HTTP Client
+httpx==0.27.0
+
+# Database
+aiosqlite==0.20.0
+
+# Scheduler
+apscheduler>=3.10.4
+
+# Settings
+pydantic-settings==2.5.0

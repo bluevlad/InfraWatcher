@@ -1,0 +1,30 @@
+services:
+  backend:
+    build: ./backend
+    container_name: infrawatcher-backend
+    restart: unless-stopped
+    ports:
+      - "9090:9090"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - backend-data:/app/data
+    environment:
+      - IW_DB_PATH=/app/data/infrawatcher.db
+      - IW_DOCKER_SOCKET=/var/run/docker.sock
+      - IW_HEALTHCHECK_HOST=host.docker.internal
+      - IW_METRICS_INTERVAL=10
+      - IW_HEALTHCHECK_INTERVAL=30
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  frontend:
+    build: ./frontend
+    container_name: infrawatcher-frontend
+    restart: unless-stopped
+    ports:
+      - "4090:4090"
+    depends_on:
+      - backend
+
+volumes:
+  backend-data:
