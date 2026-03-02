@@ -9,6 +9,7 @@ on:
       - '.gitignore'
       - 'LICENSE'
       - '.github/**/*.md'
+  workflow_dispatch:
 
 jobs:
   deploy:
