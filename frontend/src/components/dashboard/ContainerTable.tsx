@@ -1,7 +1,9 @@
 import React from 'react';
 import { Card, Table, Tag, Progress, Typography } from 'antd';
+import { Link } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
 import type { ContainerInfo } from '../../types';
+import { groupColors, groupOrder } from '../../constants/colors';
 
 const { Text } = Typography;
 
@@ -26,17 +28,6 @@ const statusColors: Record<string, string> = {
   created: 'default',
 };
 
-const groupColors: Record<string, string> = {
-  Academy: '#1890ff',
-  AllergyInsight: '#722ed1',
-  CompanyAnalyzer: '#13c2c2',
-  EduFit: '#52c41a',
-  Tools: '#fa8c16',
-  HopenVision: '#eb2f96',
-  unmong: '#2f54eb',
-  'DB/Infra': '#8c8c8c',
-};
-
 const columns: ColumnsType<ContainerInfo> = [
   {
     title: 'Container',
@@ -46,11 +37,15 @@ const columns: ColumnsType<ContainerInfo> = [
     width: 220,
     render: (name: string, record) => (
       <div>
-        <Text strong style={{ fontSize: 13 }}>{name}</Text>
+        <Link to={`/container/${name}`}>
+          <Text strong style={{ fontSize: 13 }}>{name}</Text>
+        </Link>
         <br />
-        <Tag color={groupColors[record.group] || 'default'} style={{ fontSize: 11, marginTop: 2 }}>
-          {record.group}
-        </Tag>
+        <Link to={`/group/${record.group}`}>
+          <Tag color={groupColors[record.group] || 'default'} style={{ fontSize: 11, marginTop: 2, cursor: 'pointer' }}>
+            {record.group}
+          </Tag>
+        </Link>
       </div>
     ),
   },
@@ -138,7 +133,6 @@ const columns: ColumnsType<ContainerInfo> = [
 const ContainerTable: React.FC<ContainerTableProps> = ({ containers }) => {
   // Sort by group, then by name within group
   const sorted = [...containers].sort((a, b) => {
-    const groupOrder = ['Academy', 'AllergyInsight', 'CompanyAnalyzer', 'EduFit', 'Tools', 'HopenVision', 'unmong', 'DB/Infra'];
     const gi = groupOrder.indexOf(a.group) - groupOrder.indexOf(b.group);
     if (gi !== 0) return gi;
     return a.name.localeCompare(b.name);

@@ -1,11 +1,13 @@
 import React from 'react';
 import { Card, Col, Row, Tag, Tooltip, Typography } from 'antd';
+import { Link } from 'react-router-dom';
 import {
   CheckCircleFilled,
   CloseCircleFilled,
   QuestionCircleFilled,
 } from '@ant-design/icons';
 import type { HealthCheckResult } from '../../types';
+import { groupColors } from '../../constants/colors';
 
 const { Text } = Typography;
 
@@ -17,17 +19,6 @@ const statusIcons: Record<string, React.ReactNode> = {
   healthy: <CheckCircleFilled style={{ color: '#52c41a', fontSize: 18 }} />,
   unhealthy: <CloseCircleFilled style={{ color: '#ff4d4f', fontSize: 18 }} />,
   unknown: <QuestionCircleFilled style={{ color: '#d9d9d9', fontSize: 18 }} />,
-};
-
-const groupColors: Record<string, string> = {
-  Academy: '#1890ff',
-  AllergyInsight: '#722ed1',
-  CompanyAnalyzer: '#13c2c2',
-  EduFit: '#52c41a',
-  Tools: '#fa8c16',
-  HopenVision: '#eb2f96',
-  unmong: '#2f54eb',
-  'DB/Infra': '#8c8c8c',
 };
 
 const HealthCheckPanel: React.FC<HealthCheckPanelProps> = ({ healthChecks }) => {
@@ -46,7 +37,9 @@ const HealthCheckPanel: React.FC<HealthCheckPanelProps> = ({ healthChecks }) => 
             <Card
               size="small"
               title={
-                <Tag color={groupColors[group] || 'default'}>{group}</Tag>
+                <Link to={`/group/${group}`}>
+                  <Tag color={groupColors[group] || 'default'} style={{ cursor: 'pointer' }}>{group}</Tag>
+                </Link>
               }
               style={{ borderRadius: 6 }}
             >
@@ -77,7 +70,9 @@ const HealthCheckPanel: React.FC<HealthCheckPanelProps> = ({ healthChecks }) => 
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       {statusIcons[hc.status] || statusIcons.unknown}
-                      <Text style={{ fontSize: 12 }}>{hc.container_name}</Text>
+                      <Link to={`/container/${hc.container_name}`}>
+                        <Text style={{ fontSize: 12 }}>{hc.container_name}</Text>
+                      </Link>
                     </div>
                     {hc.response_time_ms != null && (
                       <Text type="secondary" style={{ fontSize: 11 }}>

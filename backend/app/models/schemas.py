@@ -81,3 +81,52 @@ class HealthResponse(BaseModel):
     app_name: str
     version: str
     timestamp: str
+
+
+class ContainerMetricPoint(BaseModel):
+    timestamp: str
+    cpu_percent: float
+    memory_percent: float
+    memory_usage: int
+    network_rx: int
+    network_tx: int
+
+
+class ContainerMetricsHistory(BaseModel):
+    container_name: str
+    start: str
+    end: str
+    interval: str
+    data: list[ContainerMetricPoint]
+
+
+class HealthCheckHistoryItem(BaseModel):
+    id: int
+    timestamp: str
+    container_name: str
+    health_type: str
+    port: int | None
+    path: str | None
+    status: str
+    response_time_ms: float | None
+    status_code: int | None
+    error: str | None
+
+
+class PaginatedHealthChecks(BaseModel):
+    items: list[HealthCheckHistoryItem]
+    total: int
+    page: int
+    size: int
+    pages: int
+
+
+class GroupSummary(BaseModel):
+    group: str
+    container_count: int
+    running_count: int
+    stopped_count: int
+    healthy_count: int
+    unhealthy_count: int
+    total_cpu_percent: float
+    total_memory_percent: float

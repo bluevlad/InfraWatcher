@@ -12,7 +12,7 @@ from app.core.scheduler import (
     collect_metrics_job,
     health_check_job,
 )
-from app.api import health, containers, system, healthcheck, websocket
+from app.api import health, containers, system, healthcheck, websocket, container_history, groups
 
 logging.basicConfig(
     level=logging.INFO,
@@ -64,6 +64,8 @@ app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(containers.router, prefix="/api", tags=["containers"])
 app.include_router(system.router, prefix="/api", tags=["system"])
 app.include_router(healthcheck.router, prefix="/api", tags=["healthchecks"])
+app.include_router(container_history.router, prefix="/api", tags=["container-history"])
+app.include_router(groups.router, prefix="/api", tags=["groups"])
 
 # WebSocket
 app.include_router(websocket.router, tags=["websocket"])

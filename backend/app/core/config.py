@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     WS_BROADCAST_INTERVAL: int = 10
 
     # Data retention (hours)
-    DATA_RETENTION_HOURS: int = 24
+    DATA_RETENTION_HOURS: int = 168  # 7 days
 
     model_config = {
         "env_file": ".env",

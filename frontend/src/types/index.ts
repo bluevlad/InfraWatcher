@@ -69,3 +69,52 @@ export interface WSMessage {
   type: string;
   data: DashboardSnapshot;
 }
+
+export interface ContainerMetricPoint {
+  timestamp: string;
+  cpu_percent: number;
+  memory_percent: number;
+  memory_usage: number;
+  network_rx: number;
+  network_tx: number;
+}
+
+export interface ContainerMetricsHistory {
+  container_name: string;
+  start: string;
+  end: string;
+  interval: string;
+  data: ContainerMetricPoint[];
+}
+
+export interface HealthCheckHistoryItem {
+  id: number;
+  timestamp: string;
+  container_name: string;
+  health_type: string;
+  port: number | null;
+  path: string | null;
+  status: string;
+  response_time_ms: number | null;
+  status_code: number | null;
+  error: string | null;
+}
+
+export interface PaginatedHealthChecks {
+  items: HealthCheckHistoryItem[];
+  total: number;
+  page: number;
+  size: number;
+  pages: number;
+}
+
+export interface GroupSummary {
+  group: string;
+  container_count: number;
+  running_count: number;
+  stopped_count: number;
+  healthy_count: number;
+  unhealthy_count: number;
+  total_cpu_percent: number;
+  total_memory_percent: number;
+}

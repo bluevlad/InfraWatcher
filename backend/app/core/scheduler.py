@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from app.core.config import get_settings
-from app.core.database import cleanup_old_data
+from app.services.aggregation_service import aggregate_hourly_metrics, cleanup_with_retention
 from app.models.schemas import DashboardSnapshot, DashboardSummary
 from app.services.docker_service import collect_containers, save_container_metrics
 from app.services.healthcheck_service import run_health_checks, save_health_checks
@@ -25,6 +25,14 @@ def get_latest_snapshot() -> dict | None:
     if _latest_system is None:
         return None
     return _build_snapshot()
+
+
+def get_latest_containers():
+    return _latest_containers
+
+
+def get_latest_health_checks():
+    return _latest_health_checks
 
 
 def _build_snapshot() -> dict:
@@ -102,9 +110,16 @@ async def health_check_job():
         logger.error("Health check failed: %s", e)
 
 
+async def aggregation_job():
+    try:
+        await aggregate_hourly_metrics()
+    except Exception as e:
+        logger.error("Hourly aggregation failed: %s", e)
+
+
 async def cleanup_job():
     try:
-        await cleanup_old_data()
+        await cleanup_with_retention()
     except Exception as e:
         logger.error("Data cleanup failed: %s", e)
 
@@ -124,6 +139,13 @@ def start_scheduler():
         "interval",
         seconds=settings.HEALTHCHECK_INTERVAL,
         id="health_checks",
+        max_instances=1,
+    )
+    scheduler.add_job(
+        aggregation_job,
+        "cron",
+        minute=5,
+        id="aggregation",
         max_instances=1,
     )
     scheduler.add_job(

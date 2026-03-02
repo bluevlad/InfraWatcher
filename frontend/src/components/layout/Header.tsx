@@ -1,6 +1,7 @@
 import React from 'react';
 import { Layout, Space, Typography } from 'antd';
 import { DesktopOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
 import ConnectionStatus from '../dashboard/ConnectionStatus';
 
 const { Header: AntHeader } = Layout;
@@ -22,12 +23,14 @@ const Header: React.FC<HeaderProps> = ({ connected }) => {
         height: 56,
       }}
     >
-      <Space>
-        <DesktopOutlined style={{ color: '#fff', fontSize: 20 }} />
-        <Title level={4} style={{ color: '#fff', margin: 0, lineHeight: '56px' }}>
-          InfraWatcher
-        </Title>
-      </Space>
+      <Link to="/" style={{ textDecoration: 'none' }}>
+        <Space>
+          <DesktopOutlined style={{ color: '#fff', fontSize: 20 }} />
+          <Title level={4} style={{ color: '#fff', margin: 0, lineHeight: '56px' }}>
+            InfraWatcher
+          </Title>
+        </Space>
+      </Link>
       <ConnectionStatus connected={connected} />
     </AntHeader>
   );
