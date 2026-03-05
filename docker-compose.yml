@@ -2,7 +2,7 @@ services:
   backend:
     build: ./backend
     container_name: infrawatcher-backend
-    restart: unless-stopped
+    restart: always
     ports:
       - "9090:9090"
     volumes:
@@ -20,7 +20,7 @@ services:
   frontend:
     build: ./frontend
     container_name: infrawatcher-frontend
-    restart: unless-stopped
+    restart: always
     ports:
       - "4090:4090"
     depends_on:
