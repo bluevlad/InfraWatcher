@@ -4,6 +4,7 @@ export interface ContainerInfo {
   status: string;
   image: string;
   created: string;
+  started_at: string;
   uptime: string;
   cpu_percent: number;
   memory_usage: number;

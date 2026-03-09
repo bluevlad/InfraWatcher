@@ -1,11 +1,22 @@
 import React from 'react';
 import { Row, Col, Card, Tag, Progress, Typography } from 'antd';
 import { Link } from 'react-router-dom';
-import { RightOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, RightOutlined } from '@ant-design/icons';
 import type { ContainerInfo } from '../../types';
 import { groupColors, groupOrder } from '../../constants/colors';
 
 const { Text } = Typography;
+
+const formatStartedAt = (isoStr: string): string => {
+  if (!isoStr) return '-';
+  try {
+    const d = new Date(isoStr);
+    const pad = (n: number) => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  } catch {
+    return '-';
+  }
+};
 
 interface ContainerCardGridProps {
   containers: ContainerInfo[];
@@ -83,8 +94,12 @@ const ContainerCardGrid: React.FC<ContainerCardGridProps> = ({ containers }) => 
                 />
               </div>
 
-              <div style={{ textAlign: 'center' }}>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <Tag color={statusColors[c.status] || 'default'}>{c.status}</Tag>
+                <Text type="secondary" style={{ fontSize: 10 }}>
+                  <ClockCircleOutlined style={{ marginRight: 3 }} />
+                  {formatStartedAt(c.started_at)}
+                </Text>
               </div>
             </Card>
           </Col>

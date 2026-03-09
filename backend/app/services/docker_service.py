@@ -135,6 +135,7 @@ def _collect_single_container(name: str) -> ContainerInfo | None:
             status=status,
             image=image_tags[0],
             created=container.attrs.get("Created", ""),
+            started_at=started_at if status == "running" else "",
             uptime=_format_uptime(started_at) if status == "running" else "-",
             ports=_format_ports(container),
             **stats,
