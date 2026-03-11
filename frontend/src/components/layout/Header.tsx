@@ -1,6 +1,6 @@
 import React from 'react';
-import { Layout, Space, Typography } from 'antd';
-import { DesktopOutlined } from '@ant-design/icons';
+import { Layout, Space, Typography, Button, Tooltip } from 'antd';
+import { DesktopOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import ConnectionStatus from '../dashboard/ConnectionStatus';
 
@@ -10,6 +10,14 @@ const { Title } = Typography;
 interface HeaderProps {
   connected: boolean;
 }
+
+const openWidget = () => {
+  window.open(
+    '/widget',
+    'infrawatcher-widget',
+    'width=380,height=820,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes',
+  );
+};
 
 const Header: React.FC<HeaderProps> = ({ connected }) => {
   return (
@@ -31,7 +39,18 @@ const Header: React.FC<HeaderProps> = ({ connected }) => {
           </Title>
         </Space>
       </Link>
-      <ConnectionStatus connected={connected} />
+      <Space size={12}>
+        <Tooltip title="Open monitoring widget">
+          <Button
+            type="text"
+            icon={<AppstoreOutlined style={{ color: '#fff', fontSize: 16 }} />}
+            onClick={openWidget}
+            style={{ color: '#fff' }}
+            size="small"
+          />
+        </Tooltip>
+        <ConnectionStatus connected={connected} />
+      </Space>
     </AntHeader>
   );
 };
