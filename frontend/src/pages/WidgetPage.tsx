@@ -180,7 +180,7 @@ const WidgetPage: React.FC<WidgetPageProps> = ({ snapshot, connected }) => {
                 group.items.map((c) => (
                   <a
                     key={c.name}
-                    href={`/container/${c.name}`}
+                    href={`/infra/container/${c.name}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: 'none', color: 'inherit' }}
