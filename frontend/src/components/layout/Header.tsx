@@ -13,7 +13,7 @@ interface HeaderProps {
 
 const openWidget = () => {
   window.open(
-    '/widget',
+    '/infra/widget',
     'infrawatcher-widget',
     'width=380,height=820,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes',
   );
