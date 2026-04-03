@@ -7,9 +7,10 @@ import type {
   PaginatedHealthChecks,
   GroupSummary,
 } from '../types';
+import { basePath } from '../constants/basePath';
 
 const api = axios.create({
-  baseURL: '/infra/api',
+  baseURL: `${basePath}/api`,
   timeout: 10000,
 });
 

@@ -3,6 +3,7 @@ import { Layout, Space, Typography, Button, Tooltip } from 'antd';
 import { DesktopOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import ConnectionStatus from '../dashboard/ConnectionStatus';
+import { basePath } from '../../constants/basePath';
 
 const { Header: AntHeader } = Layout;
 const { Title } = Typography;
@@ -13,7 +14,7 @@ interface HeaderProps {
 
 const openWidget = () => {
   window.open(
-    '/infra/widget',
+    `${basePath}/widget`,
     'infrawatcher-widget',
     'width=380,height=820,menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes',
   );

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { Typography, Spin } from 'antd';
 import { fetchContainers } from '../services/api';
 import { groupColors, groupOrder } from '../constants/colors';
+import { basePath } from '../constants/basePath';
 import type { ContainerInfo, DashboardSnapshot } from '../types';
 
 const { Text } = Typography;
@@ -180,7 +181,7 @@ const WidgetPage: React.FC<WidgetPageProps> = ({ snapshot, connected }) => {
                 group.items.map((c) => (
                   <a
                     key={c.name}
-                    href={`/infra/container/${c.name}`}
+                    href={`${basePath}/container/${c.name}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{ textDecoration: 'none', color: 'inherit' }}
