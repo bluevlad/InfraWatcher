@@ -131,10 +131,11 @@ async def run_health_checks() -> list[HealthCheckResult]:
 
     tasks = []
     for config in CONTAINER_REGISTRY:
+        target_host = config.host if config.host else host
         if config.health_type == "http":
-            tasks.append(_check_http(config, host, timeout))
+            tasks.append(_check_http(config, target_host, timeout))
         elif config.health_type == "tcp":
-            tasks.append(_check_tcp(config, host, timeout))
+            tasks.append(_check_tcp(config, target_host, timeout))
         elif config.health_type == "docker":
             tasks.append(_check_docker(config))
 

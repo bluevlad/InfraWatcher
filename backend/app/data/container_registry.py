@@ -8,6 +8,7 @@ class ContainerConfig:
     port: int | None
     health_path: str | None
     health_type: str  # "http", "tcp", "docker"
+    host: str | None = None  # None = use default HEALTHCHECK_HOST
 
 
 CONTAINER_REGISTRY: list[ContainerConfig] = [
@@ -50,6 +51,10 @@ CONTAINER_REGISTRY: list[ContainerConfig] = [
     ContainerConfig("mongodb", "DB/Infra", 27017, None, "tcp"),
     ContainerConfig("pgadmin", "DB/Infra", 8882, "/", "http"),
     ContainerConfig("mongo-express", "DB/Infra", 8881, "/", "http"),
+
+    # Host Services (non-Docker, LaunchAgent managed)
+    ContainerConfig("ollama", "Host Services", 11434, "/api/tags", "http"),
+    ContainerConfig("mlx-server", "Host Services", 11435, "/v1/models", "http"),
 ]
 
 CONTAINER_MAP: dict[str, ContainerConfig] = {c.name: c for c in CONTAINER_REGISTRY}
