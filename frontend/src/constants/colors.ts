@@ -7,6 +7,7 @@ export const groupColors: Record<string, string> = {
   HopenVision: '#eb2f96',
   unmong: '#2f54eb',
   'DB/Infra': '#8c8c8c',
+  'Host Services': '#d4380d',
 };
 
 export const groupOrder = [
@@ -18,4 +19,5 @@ export const groupOrder = [
   'HopenVision',
   'unmong',
   'DB/Infra',
+  'Host Services',
 ];
