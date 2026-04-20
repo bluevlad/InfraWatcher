@@ -44,7 +44,7 @@ CONTAINER_REGISTRY: list[ContainerConfig] = [
 
     # unmong
     ContainerConfig("unmong-main", "unmong", 8888, "/actuator/health", "http"),
-    ContainerConfig("unmong-gateway", "unmong", 80, "/", "http"),
+    ContainerConfig("unmong-gateway", "unmong", 80, "/health", "http"),
 
     # DB/Infra
     ContainerConfig("postgresql", "DB/Infra", 5432, None, "tcp"),
