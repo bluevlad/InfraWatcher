@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfraWatcher - Autonomous Dev & Ops</title>
+    <meta name="description" content="InfraWatcher - Docker 컨테이너, 한눈에 관제">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/service-landing.css">
+    <style>
+        :root {
+            --service-color: #06b6d4;
+            --glow-r: 6; --glow-g: 182; --glow-b: 212;
+        }
+    </style>
+</head>
+<body>
+    <div class="sl-container">
+
+        <nav class="sl-topnav">
+            <div class="sl-nav-links">
+                <a href="https://www.unmong.com/index.html" class="sl-nav-link"><span class="sl-nav-arrow">&#8593;</span> Portal</a>
+                <a href="https://www.unmong.com/architecture.html" class="sl-nav-link"><span class="sl-nav-arrow">&#8594;</span> Architecture</a>
+            </div>
+        </nav>
+
+        <section class="sl-hero">
+            <div class="sl-hero-status"><span class="dot"></span> Active</div>
+            <h1>InfraWatcher</h1>
+            <p class="tagline">Docker Container Monitoring System</p>
+            <p class="desc">Docker 컨테이너의 실시간 상태를 모니터링하고, 이상 감지 시 알림을 제공하는 인프라 관제 시스템. 전체 서비스의 헬스 상태를 한눈에 확인</p>
+            <div class="sl-hero-actions">
+                <a href="https://infrawatcher.unmong.com/" target="_blank" rel="noopener" class="sl-btn sl-btn-primary">대시보드</a>
+                <a href="https://infrawatcher.unmong.com/api/docs" target="_blank" rel="noopener" class="sl-btn sl-btn-outline">API Docs</a>
+            </div>
+        </section>
+
+        <section class="sl-section">
+            <div class="sl-section-title">Features</div>
+            <div class="sl-features">
+                <a class="sl-feature" href="https://infrawatcher.unmong.com/" target="_blank" rel="noopener">
+                    <span class="sl-feature-icon">&#128225;</span>
+                    <div class="sl-feature-name">실시간 대시보드</div>
+                    <div class="sl-feature-desc">전체 컨테이너 상태, CPU/메모리 사용량 실시간 모니터링</div>
+                    <span class="sl-feature-tag">Dashboard</span>
+                </a>
+                <a class="sl-feature" href="https://infrawatcher.unmong.com/" target="_blank" rel="noopener">
+                    <span class="sl-feature-icon">&#128994;</span>
+                    <div class="sl-feature-name">헬스체크</div>
+                    <div class="sl-feature-desc">컨테이너별 헬스 상태 자동 점검 및 이상 감지</div>
+                    <span class="sl-feature-tag">Health</span>
+                </a>
+                <a class="sl-feature" href="https://infrawatcher.unmong.com/api/docs" target="_blank" rel="noopener">
+                    <span class="sl-feature-icon">&#128268;</span>
+                    <div class="sl-feature-name">API</div>
+                    <div class="sl-feature-desc">컨테이너 상태 조회 RESTful API</div>
+                    <span class="sl-feature-tag">Backend API</span>
+                </a>
+            </div>
+        </section>
+
+        <section class="sl-section sl-arch">
+            <div class="sl-section-title">Architecture</div>
+            <div class="sl-arch-diagram">
+                <div class="sl-arch-node">
+                    <div class="sl-arch-node-label">Docker Engine</div>
+                    <div class="sl-arch-node-tech">Socket API</div>
+                </div>
+                <div class="sl-arch-arrow">&#8594;</div>
+                <div class="sl-arch-node highlight">
+                    <div class="sl-arch-node-label">Backend</div>
+                    <div class="sl-arch-node-tech">FastAPI</div>
+                </div>
+                <div class="sl-arch-arrow">&#8594;</div>
+                <div class="sl-arch-node">
+                    <div class="sl-arch-node-label">Frontend</div>
+                    <div class="sl-arch-node-tech">React</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sl-section sl-flow">
+            <div class="sl-section-title">Service Flow</div>
+            <div class="sl-flow-steps">
+                <div class="sl-flow-step">
+                    <div class="sl-flow-step-num">1</div>
+                    <div class="sl-flow-step-label">Docker 연결</div>
+                    <div class="sl-flow-step-desc">Socket API 접근</div>
+                </div>
+                <div class="sl-flow-arrow">&#8594;</div>
+                <div class="sl-flow-step">
+                    <div class="sl-flow-step-num">2</div>
+                    <div class="sl-flow-step-label">상태 수집</div>
+                    <div class="sl-flow-step-desc">컨테이너 메트릭</div>
+                </div>
+                <div class="sl-flow-arrow">&#8594;</div>
+                <div class="sl-flow-step">
+                    <div class="sl-flow-step-num">3</div>
+                    <div class="sl-flow-step-label">이상 감지</div>
+                    <div class="sl-flow-step-desc">헬스체크 분석</div>
+                </div>
+                <div class="sl-flow-arrow">&#8594;</div>
+                <div class="sl-flow-step">
+                    <div class="sl-flow-step-num">4</div>
+                    <div class="sl-flow-step-label">알림/대시보드</div>
+                    <div class="sl-flow-step-desc">실시간 시각화</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="sl-section sl-tech">
+            <div class="sl-section-title">Tech Stack</div>
+            <div class="sl-tech-list">
+                <span class="sl-tech-badge"><span class="sl-tech-dot" style="background:#61dafb;"></span> React</span>
+                <span class="sl-tech-badge"><span class="sl-tech-dot" style="background:#009688;"></span> FastAPI</span>
+                <span class="sl-tech-badge"><span class="sl-tech-dot" style="background:#2496ed;"></span> Docker Engine API</span>
+                <span class="sl-tech-badge"><span class="sl-tech-dot" style="background:#2496ed;"></span> Docker</span>
+                <span class="sl-tech-badge"><span class="sl-tech-dot" style="background:#f97316;"></span> Nginx</span>
+            </div>
+        </section>
+
+        <section class="sl-section sl-connected">
+            <div class="sl-section-title">Monitoring Targets</div>
+            <div class="sl-connected-grid">
+                <a href="https://allergy.unmong.com/intro.html" class="sl-connected-card">
+                    <span class="sl-connected-dot" style="background:#f43f5e;"></span>
+                    <div class="sl-connected-info">
+                        <div class="sl-connected-name">AllergyInsight</div>
+                        <div class="sl-connected-role">모니터링 대상</div>
+                    </div>
+                    <span class="sl-connected-arrow">&#8594;</span>
+                </a>
+                <a href="https://edufit.unmong.com/intro.html" class="sl-connected-card">
+                    <span class="sl-connected-dot" style="background:#10b981;"></span>
+                    <div class="sl-connected-info">
+                        <div class="sl-connected-name">EduFit</div>
+                        <div class="sl-connected-role">모니터링 대상</div>
+                    </div>
+                    <span class="sl-connected-arrow">&#8594;</span>
+                </a>
+                <a href="https://hopenvision.unmong.com/intro.html" class="sl-connected-card">
+                    <span class="sl-connected-dot" style="background:#f59e0b;"></span>
+                    <div class="sl-connected-info">
+                        <div class="sl-connected-name">HopenVision</div>
+                        <div class="sl-connected-role">모니터링 대상</div>
+                    </div>
+                    <span class="sl-connected-arrow">&#8594;</span>
+                </a>
+                <a href="https://newsletter.unmong.com/intro.html" class="sl-connected-card">
+                    <span class="sl-connected-dot" style="background:#ec4899;"></span>
+                    <div class="sl-connected-info">
+                        <div class="sl-connected-name">NewsLetterPlatform</div>
+                        <div class="sl-connected-role">모니터링 대상</div>
+                    </div>
+                    <span class="sl-connected-arrow">&#8594;</span>
+                </a>
+                <a href="https://standup.unmong.com/intro.html" class="sl-connected-card">
+                    <span class="sl-connected-dot" style="background:#14b8a6;"></span>
+                    <div class="sl-connected-info">
+                        <div class="sl-connected-name">StandUp</div>
+                        <div class="sl-connected-role">모니터링 대상</div>
+                    </div>
+                    <span class="sl-connected-arrow">&#8594;</span>
+                </a>
+                <a href="https://loganalyzer.unmong.com/intro.html" class="sl-connected-card">
+                    <span class="sl-connected-dot" style="background:#f97316;"></span>
+                    <div class="sl-connected-info">
+                        <div class="sl-connected-name">LogAnalyzer</div>
+                        <div class="sl-connected-role">모니터링 대상</div>
+                    </div>
+                    <span class="sl-connected-arrow">&#8594;</span>
+                </a>
+            </div>
+        </section>
+
+    </div>
+</body>
+</html>
