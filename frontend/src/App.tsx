@@ -6,6 +6,7 @@ import DashboardPage from './pages/DashboardPage';
 import ContainerDetailPage from './pages/ContainerDetailPage';
 import GroupDetailPage from './pages/GroupDetailPage';
 import WidgetPage from './pages/WidgetPage';
+import GatewayLanding from './pages/gateway-landing/GatewayLanding';
 import { useWebSocket } from './hooks/useWebSocket';
 
 const App: React.FC = () => {
@@ -35,13 +36,33 @@ const App: React.FC = () => {
         },
       }}
     >
-      <AppLayout connected={connected}>
-        <Routes>
-          <Route path="/" element={<DashboardPage snapshot={snapshot} />} />
-          <Route path="/container/:containerName" element={<ContainerDetailPage snapshot={snapshot} />} />
-          <Route path="/group/:groupName" element={<GroupDetailPage snapshot={snapshot} />} />
-        </Routes>
-      </AppLayout>
+      <Routes>
+        <Route path="/" element={<GatewayLanding />} />
+        <Route
+          path="/dashboard"
+          element={
+            <AppLayout connected={connected}>
+              <DashboardPage snapshot={snapshot} />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/container/:containerName"
+          element={
+            <AppLayout connected={connected}>
+              <ContainerDetailPage snapshot={snapshot} />
+            </AppLayout>
+          }
+        />
+        <Route
+          path="/group/:groupName"
+          element={
+            <AppLayout connected={connected}>
+              <GroupDetailPage snapshot={snapshot} />
+            </AppLayout>
+          }
+        />
+      </Routes>
     </ConfigProvider>
   );
 };
