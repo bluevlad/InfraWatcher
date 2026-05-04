@@ -28,7 +28,7 @@ import TimeRangeSelector, {
   getRangeStartISO,
 } from '../components/common/TimeRangeSelector';
 import MetricChart from '../components/charts/MetricChart';
-import ContainerTable from '../components/dashboard/ContainerTable';
+import ContainerCardGrid from '../components/dashboard/ContainerCardGrid';
 import HealthCheckPanel from '../components/dashboard/HealthCheckPanel';
 
 const { Title } = Typography;
@@ -149,7 +149,7 @@ const GroupDetailPage: React.FC<GroupDetailPageProps> = ({ snapshot }) => {
 
       {/* Container List */}
       <div style={{ marginBottom: 16 }}>
-        <ContainerTable containers={groupContainers} />
+        <ContainerCardGrid containers={groupContainers} />
       </div>
 
       {/* Group Resource Trends */}

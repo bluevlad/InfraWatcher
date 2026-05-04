@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { WebSocketService } from '../services/websocket';
 import type { DashboardSnapshot } from '../types';
+import { basePath } from '../constants/basePath';
 
 export function useWebSocket() {
   const [snapshot, setSnapshot] = useState<DashboardSnapshot | null>(null);
@@ -13,7 +14,7 @@ export function useWebSocket() {
 
   useEffect(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const wsUrl = `${protocol}//${window.location.host}/ws`;
+    const wsUrl = `${protocol}//${window.location.host}${basePath}/ws`;
 
     const service = new WebSocketService(
       wsUrl,
