@@ -31,6 +31,3 @@ Thumbs.db
 
 # Docker data
 backend-data/
-
-# Container config (local override; commit containers.example.json instead)
-backend/app/data/containers.json
