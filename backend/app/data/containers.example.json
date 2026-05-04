@@ -1,0 +1,6 @@
+[
+  {"name": "my-web-app", "group": "WebApps", "port": 8080, "health_path": "/health", "health_type": "http"},
+  {"name": "my-frontend", "group": "WebApps", "port": 3000, "health_path": "/", "health_type": "http"},
+  {"name": "my-worker", "group": "WebApps", "port": null, "health_path": null, "health_type": "docker"},
+  {"name": "postgres", "group": "Database", "port": 5432, "health_path": null, "health_type": "tcp"}
+]

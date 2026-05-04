@@ -1,4 +1,9 @@
+import json
+import logging
 from dataclasses import dataclass
+from pathlib import Path
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass(frozen=True)
@@ -11,45 +16,23 @@ class ContainerConfig:
     host: str | None = None  # None = use default HEALTHCHECK_HOST
 
 
-CONTAINER_REGISTRY: list[ContainerConfig] = [
-    # AllergyInsight
-    ContainerConfig("allergyinsight-backend", "AllergyInsight", 9040, "/api/health", "http"),
-    ContainerConfig("allergyinsight-frontend", "AllergyInsight", 4040, "/", "http"),
-    ContainerConfig("allergyinsight-scheduler", "AllergyInsight", None, None, "docker"),
+def _load_containers() -> list[ContainerConfig]:
+    data_dir = Path(__file__).parent
+    config_file = data_dir / "containers.json"
+    using_example = False
+    if not config_file.exists():
+        config_file = data_dir / "containers.example.json"
+        using_example = True
+    with config_file.open(encoding="utf-8") as f:
+        items = json.load(f)
+    if using_example:
+        logger.warning(
+            "containers.json 없음 — containers.example.json (placeholder) 사용. "
+            "실제 모니터링하려면 containers.json을 생성해야 합니다."
+        )
+    return [ContainerConfig(**item) for item in items]
 
-    # CompanyAnalyzer
-    ContainerConfig("companyanalyzer-backend", "CompanyAnalyzer", 9080, "/api/health", "http"),
-    ContainerConfig("companyanalyzer-frontend", "CompanyAnalyzer", 4080, "/", "http"),
 
-    # EduFit
-    ContainerConfig("edufit-backend", "EduFit", 9070, "/api/health", "http"),
-    ContainerConfig("edufit-frontend", "EduFit", 4070, "/", "http"),
-    ContainerConfig("edufit-ai-crawler", "EduFit", None, None, "docker"),
-
-    # Tools
-    ContainerConfig("standup-app", "Tools", 9060, "/api/v1/health", "http"),
-    ContainerConfig("newsletterplatform-web", "Tools", 4050, "/", "http"),
-    ContainerConfig("newsletterplatform-scheduler", "Tools", None, None, "docker"),
-
-    # HopenVision
-    ContainerConfig("hopenvision-api", "HopenVision", 9050, "/actuator/health", "http"),
-    ContainerConfig("hopenvision-web", "HopenVision", 4060, "/", "http"),
-    ContainerConfig("hopenvision-admin", "HopenVision", 4061, "/", "http"),
-
-    # unmong
-    ContainerConfig("unmong-main", "unmong", 8888, "/actuator/health", "http"),
-    ContainerConfig("unmong-gateway", "unmong", 80, "/health", "http"),
-
-    # DB/Infra
-    ContainerConfig("postgresql", "DB/Infra", 5432, None, "tcp"),
-    ContainerConfig("mongodb", "DB/Infra", 27017, None, "tcp"),
-    ContainerConfig("pgadmin", "DB/Infra", 8882, "/", "http"),
-    ContainerConfig("mongo-express", "DB/Infra", 8881, "/", "http"),
-
-    # Host Services (non-Docker, LaunchAgent managed)
-    ContainerConfig("ollama", "Host Services", 11434, "/api/tags", "http"),
-    ContainerConfig("mlx-server", "Host Services", 11435, "/v1/models", "http"),
-]
-
+CONTAINER_REGISTRY: list[ContainerConfig] = _load_containers()
 CONTAINER_MAP: dict[str, ContainerConfig] = {c.name: c for c in CONTAINER_REGISTRY}
 GROUP_NAMES: list[str] = list(dict.fromkeys(c.group for c in CONTAINER_REGISTRY))
