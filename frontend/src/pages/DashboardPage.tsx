@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Space, Spin, Typography } from 'antd';
 import SystemSummary from '../components/dashboard/SystemSummary';
-import ContainerTable from '../components/dashboard/ContainerTable';
+import ContainerCardGrid from '../components/dashboard/ContainerCardGrid';
 import HealthCheckPanel from '../components/dashboard/HealthCheckPanel';
 import { fetchContainers, fetchSystemMetrics, fetchHealthChecks } from '../services/api';
 import type { ContainerInfo, SystemMetrics, HealthCheckResult, DashboardSnapshot, DashboardSummary } from '../types';
@@ -85,7 +85,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ snapshot }) => {
         </Text>
       </div>
       <SystemSummary system={system} summary={summary} />
-      <ContainerTable containers={containers} />
+      <ContainerCardGrid containers={containers} />
       <HealthCheckPanel healthChecks={healthChecks} />
     </Space>
   );

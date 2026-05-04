@@ -26,6 +26,9 @@ class Settings(BaseSettings):
     METRICS_INTERVAL: int = 10
     HEALTHCHECK_INTERVAL: int = 30
 
+    # CORS
+    CORS_ORIGINS: str = "https://infrawatcher.unmong.com,http://localhost:4090"
+
     # WebSocket
     WS_BROADCAST_INTERVAL: int = 10
 

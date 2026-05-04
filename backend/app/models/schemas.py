@@ -11,6 +11,7 @@ class ContainerInfo(BaseModel):
     status: str  # running, stopped, paused, etc.
     image: str
     created: str
+    started_at: str
     uptime: str
     cpu_percent: float
     memory_usage: int  # bytes
