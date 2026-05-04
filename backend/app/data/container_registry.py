@@ -12,12 +12,6 @@ class ContainerConfig:
 
 
 CONTAINER_REGISTRY: list[ContainerConfig] = [
-    # Academy
-    ContainerConfig("academy-admin-back-end", "Academy", 9001, "/", "http"),
-    ContainerConfig("academy-user-back-end", "Academy", 9002, "/", "http"),
-    ContainerConfig("academy-admin-frontend", "Academy", 4001, "/", "http"),
-    ContainerConfig("academy-user-frontend", "Academy", 4002, "/", "http"),
-
     # AllergyInsight
     ContainerConfig("allergyinsight-backend", "AllergyInsight", 9040, "/api/health", "http"),
     ContainerConfig("allergyinsight-frontend", "AllergyInsight", 4040, "/", "http"),
