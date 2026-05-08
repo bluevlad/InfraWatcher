@@ -85,4 +85,17 @@ TABLES_DDL = [
     """,
     "CREATE UNIQUE INDEX IF NOT EXISTS idx_container_metrics_hourly_name_ts ON container_metrics_hourly(container_name, hour_timestamp)",
     "CREATE UNIQUE INDEX IF NOT EXISTS idx_system_metrics_hourly_ts ON system_metrics_hourly(hour_timestamp)",
+    """
+    CREATE TABLE IF NOT EXISTS audit_log (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        timestamp TEXT NOT NULL,
+        user_email TEXT NOT NULL,
+        action TEXT NOT NULL,
+        container_name TEXT NOT NULL,
+        success INTEGER NOT NULL DEFAULT 0,
+        error TEXT,
+        duration_ms INTEGER
+    )
+    """,
+    "CREATE INDEX IF NOT EXISTS idx_audit_log_ts ON audit_log(timestamp DESC)",
 ]

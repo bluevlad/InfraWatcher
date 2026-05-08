@@ -31,6 +31,7 @@ import TimeRangeSelector, {
   getRangeStartISO,
 } from '../common/TimeRangeSelector';
 import MetricChart from '../charts/MetricChart';
+import ContainerActionButtons from './ContainerActionButtons';
 
 const { Text } = Typography;
 
@@ -166,7 +167,11 @@ const ContainerDetailContent: React.FC<ContainerDetailContentProps> = ({
 
       <Row gutter={[16, 16]} style={{ marginBottom: 16 }}>
         <Col xs={24} lg={16}>
-          <Card size="small" title="Container Info">
+          <Card
+            size="small"
+            title="Container Info"
+            extra={<ContainerActionButtons containerName={containerName} status={container?.status} />}
+          >
             {container ? (
               <Descriptions size="small" column={{ xs: 1, sm: 2, lg: 3 }}>
                 <Descriptions.Item label="Status">
