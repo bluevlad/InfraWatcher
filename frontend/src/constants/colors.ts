@@ -17,3 +17,32 @@ export const groupOrder = [
   'DB/Infra',
   'Host Services',
 ];
+
+export type Tier = 'service' | 'platform';
+
+export const groupTier: Record<string, Tier> = {
+  AllergyInsight: 'service',
+  EduFit: 'service',
+  Tools: 'service',
+  HopenVision: 'service',
+  unmong: 'service',
+  'DB/Infra': 'platform',
+  'Host Services': 'platform',
+};
+
+export const tierOrder: Tier[] = ['service', 'platform'];
+
+export const tierMeta: Record<Tier, { label: string; desc: string; accent: string }> = {
+  service: {
+    label: 'Services',
+    desc: '사용자 서비스 그룹 — 장애 시 비즈니스 영향 직결',
+    accent: '#1677ff',
+  },
+  platform: {
+    label: 'Platform',
+    desc: '공유 인프라 — DB · Local LLM · Host · Agents',
+    accent: '#8c8c8c',
+  },
+};
+
+export const getTier = (group: string): Tier => groupTier[group] ?? 'service';
