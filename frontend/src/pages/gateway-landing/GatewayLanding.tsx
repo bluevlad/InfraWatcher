@@ -18,21 +18,7 @@ const FEATURES: Feature[] = [
   {
     icon: '📡',
     name: '실시간 대시보드',
-    desc: '전체 컨테이너 상태·CPU/메모리 사용량을 WebSocket 실시간 스트림으로 모니터링',
-    level: 'public',
-    to: '/dashboard',
-  },
-  {
-    icon: '🟢',
-    name: '헬스체크',
-    desc: '컨테이너별 헬스 상태 자동 점검과 이상 감지 — 그룹/개별 단위 추적',
-    level: 'public',
-    to: '/dashboard',
-  },
-  {
-    icon: '📂',
-    name: '그룹 관리',
-    desc: '서비스 그룹별 컨테이너 묶음 보기 — 의존 관계와 영향 범위 시각화',
+    desc: 'WebSocket 실시간 스트림으로 컨테이너 상태·CPU/메모리·헬스체크·그룹별 묶음을 한 화면에서 확인',
     level: 'public',
     to: '/dashboard',
   },
