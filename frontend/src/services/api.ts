@@ -12,6 +12,7 @@ import { basePath } from '../constants/basePath';
 const api = axios.create({
   baseURL: `${basePath}/api`,
   timeout: 10000,
+  withCredentials: true,
 });
 
 export async function fetchContainers(): Promise<ContainerInfo[]> {

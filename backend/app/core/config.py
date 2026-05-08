@@ -35,6 +35,18 @@ class Settings(BaseSettings):
     # Data retention (hours)
     DATA_RETENTION_HOURS: int = 168  # 7 days
 
+    # Auth — Google ID Token + JWT
+    GOOGLE_CLIENT_ID: str = ""
+    JWT_SECRET: str = "change-me-in-production"
+    JWT_ALGORITHM: str = "HS256"
+    JWT_EXPIRE_MINUTES: int = 480  # 8 hours
+    JWT_COOKIE_NAME: str = "iw_token"
+    SUPER_ADMIN_EMAILS: str = ""  # comma-separated whitelist
+
+    @property
+    def admin_email_set(self) -> set[str]:
+        return {e.strip().lower() for e in self.SUPER_ADMIN_EMAILS.split(",") if e.strip()}
+
     model_config = {
         "env_file": ".env",
         "env_prefix": "IW_",

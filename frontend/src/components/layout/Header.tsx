@@ -3,6 +3,7 @@ import { Layout, Space, Typography, Button, Tooltip } from 'antd';
 import { DesktopOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import ConnectionStatus from '../dashboard/ConnectionStatus';
+import LoginButton from '../../auth/LoginButton';
 import { basePath } from '../../constants/basePath';
 
 const { Header: AntHeader } = Layout;
@@ -51,6 +52,7 @@ const Header: React.FC<HeaderProps> = ({ connected }) => {
           />
         </Tooltip>
         <ConnectionStatus connected={connected} />
+        <LoginButton />
       </Space>
     </AntHeader>
   );

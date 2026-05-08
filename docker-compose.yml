@@ -14,6 +14,11 @@ services:
       - IW_HEALTHCHECK_HOST=host.docker.internal
       - IW_METRICS_INTERVAL=10
       - IW_HEALTHCHECK_INTERVAL=30
+      # Auth (값은 호스트의 .env 파일에서 보간 — git에 커밋 X)
+      - IW_GOOGLE_CLIENT_ID=${IW_GOOGLE_CLIENT_ID:-}
+      - IW_JWT_SECRET=${IW_JWT_SECRET:-change-me-in-production}
+      - IW_JWT_EXPIRE_MINUTES=${IW_JWT_EXPIRE_MINUTES:-480}
+      - IW_SUPER_ADMIN_EMAILS=${IW_SUPER_ADMIN_EMAILS:-}
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

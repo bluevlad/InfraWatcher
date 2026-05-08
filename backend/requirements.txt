@@ -19,3 +19,7 @@ apscheduler>=3.10.4
 
 # Settings
 pydantic-settings==2.5.0
+
+# Auth (Google ID Token + JWT)
+google-auth>=2.0
+pyjwt[crypto]==2.9.0

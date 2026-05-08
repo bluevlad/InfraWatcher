@@ -12,7 +12,7 @@ from app.core.scheduler import (
     collect_metrics_job,
     health_check_job,
 )
-from app.api import health, containers, system, healthcheck, websocket, container_history, groups
+from app.api import auth, health, containers, system, healthcheck, websocket, container_history, groups
 
 logging.basicConfig(
     level=logging.INFO,
@@ -65,6 +65,7 @@ app.add_middleware(
 )
 
 # REST API routes
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 app.include_router(health.router, prefix="/api", tags=["health"])
 app.include_router(containers.router, prefix="/api", tags=["containers"])
 app.include_router(system.router, prefix="/api", tags=["system"])
