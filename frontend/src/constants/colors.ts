@@ -1,6 +1,5 @@
 export const groupColors: Record<string, string> = {
   AllergyInsight: '#722ed1',
-  CompanyAnalyzer: '#13c2c2',
   EduFit: '#52c41a',
   Tools: '#fa8c16',
   HopenVision: '#eb2f96',
@@ -11,7 +10,6 @@ export const groupColors: Record<string, string> = {
 
 export const groupOrder = [
   'AllergyInsight',
-  'CompanyAnalyzer',
   'EduFit',
   'Tools',
   'HopenVision',

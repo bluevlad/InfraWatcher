@@ -96,7 +96,6 @@ InfraWatcher/
 | Academy | academy-admin-back-end, academy-user-back-end | 9001, 9002 |
 | Academy | academy-admin-frontend, academy-user-frontend | 4001, 4002 |
 | AllergyInsight | allergyinsight-backend, frontend, scheduler | 9040, 4040, - |
-| CompanyAnalyzer | companyanalyzer-backend, frontend | 9080, 4080 |
 | EduFit | edufit-backend, frontend, ai-crawler | 9070, 4070, - |
 | Tools | standup-app, newsletterplatform-web, scheduler | 9060, 4050, - |
 | HopenVision | hopenvision-api, web, admin | 9050, 4060, 4061 |
