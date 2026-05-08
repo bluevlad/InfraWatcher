@@ -70,17 +70,6 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ snapshot }) => {
       : 0,
   } : null);
 
-  if (loading) {
-    return (
-      <div style={{ textAlign: 'center', paddingTop: 100 }}>
-        <Spin size="large" />
-        <div style={{ marginTop: 16 }}>
-          <Text type="secondary">Loading dashboard...</Text>
-        </div>
-      </div>
-    );
-  }
-
   const [searchParams, setSearchParams] = useSearchParams();
   const adminAction = useAdminAction();
   const openContainer = searchParams.get('container');
@@ -113,6 +102,17 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ snapshot }) => {
     },
     [adminAction, updateParam],
   );
+
+  if (loading) {
+    return (
+      <div style={{ textAlign: 'center', paddingTop: 100 }}>
+        <Spin size="large" />
+        <div style={{ marginTop: 16 }}>
+          <Text type="secondary">Loading dashboard...</Text>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <Space direction="vertical" size={16} style={{ width: '100%' }}>
