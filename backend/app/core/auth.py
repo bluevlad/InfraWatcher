@@ -19,10 +19,13 @@ def verify_google_id_token(credential: str, settings: Settings) -> dict:
     if not settings.GOOGLE_CLIENT_ID:
         raise AuthError("GOOGLE_CLIENT_ID not configured")
     try:
+        # clock_skew_in_seconds: 호스트 시계가 Google NTP 대비 약간 뒤처질 수 있어
+        # 'Token used too early' 거부를 방지 (특히 macOS sleep/wake 후 OrbStack VM 드리프트)
         idinfo = id_token.verify_oauth2_token(
             credential,
             google_requests.Request(),
             settings.GOOGLE_CLIENT_ID,
+            clock_skew_in_seconds=10,
         )
     except ValueError as exc:
         raise AuthError(f"Invalid Google credential: {exc}") from exc
