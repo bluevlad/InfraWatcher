@@ -1,6 +1,7 @@
-import React, { createContext, useCallback, useContext, useEffect, useState } from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useRef, useState } from 'react';
 import type { AuthUser } from './api';
 import { fetchMe, logout as apiLogout, verifyGoogleCredential } from './api';
+import LoginModal from './LoginModal';
 
 interface AuthContextValue {
   user: AuthUser | null;
@@ -9,6 +10,9 @@ interface AuthContextValue {
   loginWithGoogle: (credential: string) => Promise<AuthUser>;
   logout: () => Promise<void>;
   refresh: () => Promise<void>;
+  loginModalOpen: boolean;
+  openLoginModal: (onSuccess?: () => void) => void;
+  closeLoginModal: () => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -16,6 +20,8 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+  const pendingCallback = useRef<(() => void) | undefined>(undefined);
 
   const refresh = useCallback(async () => {
     setLoading(true);
@@ -31,6 +37,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const loginWithGoogle = useCallback(async (credential: string) => {
     const u = await verifyGoogleCredential(credential);
     setUser(u);
+    setLoginModalOpen(false);
+    if (u.is_admin && pendingCallback.current) {
+      const cb = pendingCallback.current;
+      pendingCallback.current = undefined;
+      // Defer so search-param updates and re-renders settle first
+      setTimeout(cb, 0);
+    } else {
+      pendingCallback.current = undefined;
+    }
     return u;
   }, []);
 
@@ -40,6 +55,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     window.google?.accounts.id.disableAutoSelect();
   }, []);
 
+  const openLoginModal = useCallback((onSuccess?: () => void) => {
+    pendingCallback.current = onSuccess;
+    setLoginModalOpen(true);
+  }, []);
+
+  const closeLoginModal = useCallback(() => {
+    pendingCallback.current = undefined;
+    setLoginModalOpen(false);
+  }, []);
+
   const value: AuthContextValue = {
     user,
     loading,
@@ -47,9 +72,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loginWithGoogle,
     logout,
     refresh,
+    loginModalOpen,
+    openLoginModal,
+    closeLoginModal,
   };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+      <LoginModal />
+    </AuthContext.Provider>
+  );
 };
 
 export function useAuth(): AuthContextValue {

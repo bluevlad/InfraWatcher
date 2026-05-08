@@ -1,10 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Space, Spin, Typography } from 'antd';
+import { useSearchParams } from 'react-router-dom';
 import SystemSummary from '../components/dashboard/SystemSummary';
 import ContainerCardGrid from '../components/dashboard/ContainerCardGrid';
 import HealthCheckPanel from '../components/dashboard/HealthCheckPanel';
+import ContainerDetailDrawer from '../components/dashboard/ContainerDetailDrawer';
+import GroupDetailDrawer from '../components/dashboard/GroupDetailDrawer';
 import { fetchContainers, fetchSystemMetrics, fetchHealthChecks } from '../services/api';
 import type { ContainerInfo, SystemMetrics, HealthCheckResult, DashboardSnapshot, DashboardSummary } from '../types';
+import { useAdminAction } from '../auth/useAdminAction';
 
 const { Text } = Typography;
 
@@ -77,6 +81,39 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ snapshot }) => {
     );
   }
 
+  const [searchParams, setSearchParams] = useSearchParams();
+  const adminAction = useAdminAction();
+  const openContainer = searchParams.get('container');
+  const openGroup = searchParams.get('group');
+
+  const updateParam = useCallback(
+    (key: 'container' | 'group', value: string | null) => {
+      const next = new URLSearchParams(searchParams);
+      const otherKey = key === 'container' ? 'group' : 'container';
+      if (value) {
+        next.set(key, value);
+        next.delete(otherKey);
+      } else {
+        next.delete(key);
+      }
+      setSearchParams(next, { replace: false });
+    },
+    [searchParams, setSearchParams],
+  );
+
+  const handleContainerClick = useCallback(
+    (name: string) => {
+      adminAction(() => updateParam('container', name));
+    },
+    [adminAction, updateParam],
+  );
+  const handleGroupClick = useCallback(
+    (name: string) => {
+      adminAction(() => updateParam('group', name));
+    },
+    [adminAction, updateParam],
+  );
+
   return (
     <Space direction="vertical" size={16} style={{ width: '100%' }}>
       <div style={{ textAlign: 'right' }}>
@@ -85,8 +122,24 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ snapshot }) => {
         </Text>
       </div>
       <SystemSummary system={system} summary={summary} />
-      <ContainerCardGrid containers={containers} />
+      <ContainerCardGrid
+        containers={containers}
+        onContainerClick={handleContainerClick}
+        onGroupClick={handleGroupClick}
+      />
       <HealthCheckPanel healthChecks={healthChecks} />
+
+      <ContainerDetailDrawer
+        containerName={openContainer}
+        snapshot={snapshot}
+        onClose={() => updateParam('container', null)}
+      />
+      <GroupDetailDrawer
+        groupName={openGroup}
+        snapshot={snapshot}
+        onClose={() => updateParam('group', null)}
+        onContainerClick={handleContainerClick}
+      />
     </Space>
   );
 };

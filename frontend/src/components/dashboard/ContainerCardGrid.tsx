@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react';
 import { Row, Col, Card, Tag, Progress, Typography, Empty } from 'antd';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { ClockCircleOutlined, RightOutlined } from '@ant-design/icons';
 import type { ContainerInfo } from '../../types';
 import { groupColors, groupOrder, getTier, tierOrder, tierMeta, type Tier } from '../../constants/colors';
+import { useAdminAction } from '../../auth/useAdminAction';
 
 const UNKNOWN_GROUP_COLOR = '#8c8c8c';
 
@@ -22,6 +23,10 @@ const formatStartedAt = (isoStr: string): string => {
 
 interface ContainerCardGridProps {
   containers: ContainerInfo[];
+  /** 카드 클릭 시 호출. 미지정 시 /container/:name 으로 라우팅 (기존 동작 유지). */
+  onContainerClick?: (name: string) => void;
+  /** 그룹 헤더 클릭 시 호출. 미지정 시 /group/:name 으로 라우팅. */
+  onGroupClick?: (name: string) => void;
 }
 
 const statusColors: Record<string, string> = {
@@ -36,7 +41,12 @@ const statusColors: Record<string, string> = {
 const strokeColor = (val: number) =>
   val > 80 ? '#ff4d4f' : val > 50 ? '#faad14' : '#52c41a';
 
-const ContainerCard: React.FC<{ c: ContainerInfo }> = ({ c }) => (
+const ContainerCard: React.FC<{ c: ContainerInfo; onClick: (name: string) => void }> = ({ c, onClick }) => {
+  const handle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onClick(c.name);
+  };
+  return (
   <Card
     size="small"
     style={c.status !== 'running' ? { borderLeft: '3px solid #ff4d4f' } : undefined}
@@ -47,13 +57,17 @@ const ContainerCard: React.FC<{ c: ContainerInfo }> = ({ c }) => (
           color={statusColors[c.status] || 'default'}
           style={{ margin: 0, minWidth: 8, width: 8, height: 8, borderRadius: '50%', padding: 0, flexShrink: 0 }}
         />
-        <Link to={`/container/${c.name}`} style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+        <a
+          href={`/container/${c.name}`}
+          onClick={handle}
+          style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
+        >
           <Text strong style={{ fontSize: 13 }}>{c.name}</Text>
-        </Link>
+        </a>
       </div>
-      <Link to={`/container/${c.name}`}>
+      <a href={`/container/${c.name}`} onClick={handle} aria-label="open detail">
         <RightOutlined style={{ color: '#999', fontSize: 11 }} />
-      </Link>
+      </a>
     </div>
 
     <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, marginTop: 8 }}>
@@ -85,17 +99,27 @@ const ContainerCard: React.FC<{ c: ContainerInfo }> = ({ c }) => (
       </Text>
     </div>
   </Card>
-);
+  );
+};
 
-const GroupSubSection: React.FC<{ group: string; containers: ContainerInfo[] }> = ({ group, containers }) => {
+const GroupSubSection: React.FC<{
+  group: string;
+  containers: ContainerInfo[];
+  onContainerClick: (name: string) => void;
+  onGroupClick: (name: string) => void;
+}> = ({ group, containers, onContainerClick, onGroupClick }) => {
   const color = groupColors[group] || UNKNOWN_GROUP_COLOR;
   const running = containers.filter((c) => c.status === 'running').length;
+  const handleGroup = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onGroupClick(group);
+  };
   return (
     <div style={{ marginBottom: 16, paddingLeft: 12, borderLeft: `3px solid ${color}` }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
-        <Link to={`/group/${group}`} style={{ color }}>
+        <a href={`/group/${group}`} onClick={handleGroup} style={{ color }}>
           <Text strong style={{ fontSize: 13, color }}>{group}</Text>
-        </Link>
+        </a>
         <Text type="secondary" style={{ fontSize: 11, marginLeft: 'auto' }}>
           {running}/{containers.length} running
         </Text>
@@ -103,7 +127,7 @@ const GroupSubSection: React.FC<{ group: string; containers: ContainerInfo[] }> 
       <Row gutter={[16, 16]}>
         {containers.map((c) => (
           <Col xs={24} sm={12} md={8} lg={6} key={c.name}>
-            <ContainerCard c={c} />
+            <ContainerCard c={c} onClick={onContainerClick} />
           </Col>
         ))}
       </Row>
@@ -111,11 +135,13 @@ const GroupSubSection: React.FC<{ group: string; containers: ContainerInfo[] }> 
   );
 };
 
-const TierSection: React.FC<{ tier: Tier; groups: string[]; byGroup: Record<string, ContainerInfo[]> }> = ({
-  tier,
-  groups,
-  byGroup,
-}) => {
+const TierSection: React.FC<{
+  tier: Tier;
+  groups: string[];
+  byGroup: Record<string, ContainerInfo[]>;
+  onContainerClick: (name: string) => void;
+  onGroupClick: (name: string) => void;
+}> = ({ tier, groups, byGroup, onContainerClick, onGroupClick }) => {
   const meta = tierMeta[tier];
   const all = groups.flatMap((g) => byGroup[g] ?? []);
   const running = all.filter((c) => c.status === 'running').length;
@@ -146,13 +172,43 @@ const TierSection: React.FC<{ tier: Tier; groups: string[]; byGroup: Record<stri
       ) : (
         groups
           .filter((g) => (byGroup[g]?.length ?? 0) > 0)
-          .map((g) => <GroupSubSection key={g} group={g} containers={byGroup[g]} />)
+          .map((g) => (
+            <GroupSubSection
+              key={g}
+              group={g}
+              containers={byGroup[g]}
+              onContainerClick={onContainerClick}
+              onGroupClick={onGroupClick}
+            />
+          ))
       )}
     </div>
   );
 };
 
-const ContainerCardGrid: React.FC<ContainerCardGridProps> = ({ containers }) => {
+const ContainerCardGrid: React.FC<ContainerCardGridProps> = ({
+  containers,
+  onContainerClick,
+  onGroupClick,
+}) => {
+  const navigate = useNavigate();
+  const adminAction = useAdminAction();
+
+  const handleContainerClick = (name: string) => {
+    if (onContainerClick) {
+      onContainerClick(name);
+    } else {
+      adminAction(() => navigate(`/container/${name}`));
+    }
+  };
+  const handleGroupClick = (name: string) => {
+    if (onGroupClick) {
+      onGroupClick(name);
+    } else {
+      adminAction(() => navigate(`/group/${name}`));
+    }
+  };
+
   const { byGroup, groupsByTier } = useMemo(() => {
     const byGroup: Record<string, ContainerInfo[]> = {};
     for (const c of containers) {
@@ -180,7 +236,14 @@ const ContainerCardGrid: React.FC<ContainerCardGridProps> = ({ containers }) => 
   return (
     <Card className="dashboard-card" title="Containers" size="small">
       {tierOrder.map((tier) => (
-        <TierSection key={tier} tier={tier} groups={groupsByTier[tier]} byGroup={byGroup} />
+        <TierSection
+          key={tier}
+          tier={tier}
+          groups={groupsByTier[tier]}
+          byGroup={byGroup}
+          onContainerClick={handleContainerClick}
+          onGroupClick={handleGroupClick}
+        />
       ))}
     </Card>
   );

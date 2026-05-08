@@ -7,6 +7,7 @@ import ContainerDetailPage from './pages/ContainerDetailPage';
 import GroupDetailPage from './pages/GroupDetailPage';
 import WidgetPage from './pages/WidgetPage';
 import GatewayLanding from './pages/gateway-landing/GatewayLanding';
+import RequireAdmin from './auth/RequireAdmin';
 import { useWebSocket } from './hooks/useWebSocket';
 
 const App: React.FC = () => {
@@ -50,7 +51,9 @@ const App: React.FC = () => {
           path="/container/:containerName"
           element={
             <AppLayout connected={connected}>
-              <ContainerDetailPage snapshot={snapshot} />
+              <RequireAdmin>
+                <ContainerDetailPage snapshot={snapshot} />
+              </RequireAdmin>
             </AppLayout>
           }
         />
@@ -58,7 +61,9 @@ const App: React.FC = () => {
           path="/group/:groupName"
           element={
             <AppLayout connected={connected}>
-              <GroupDetailPage snapshot={snapshot} />
+              <RequireAdmin>
+                <GroupDetailPage snapshot={snapshot} />
+              </RequireAdmin>
             </AppLayout>
           }
         />
