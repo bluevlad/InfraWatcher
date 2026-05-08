@@ -5,6 +5,8 @@ import { ClockCircleOutlined, RightOutlined } from '@ant-design/icons';
 import type { ContainerInfo } from '../../types';
 import { groupColors, groupOrder, getTier, tierOrder, tierMeta, type Tier } from '../../constants/colors';
 
+const UNKNOWN_GROUP_COLOR = '#8c8c8c';
+
 const { Text } = Typography;
 
 const formatStartedAt = (isoStr: string): string => {
@@ -54,15 +56,7 @@ const ContainerCard: React.FC<{ c: ContainerInfo }> = ({ c }) => (
       </Link>
     </div>
 
-    <div style={{ marginBottom: 8 }}>
-      <Link to={`/group/${c.group}`}>
-        <Tag color={groupColors[c.group] || 'default'} style={{ fontSize: 10, cursor: 'pointer' }}>
-          {c.group}
-        </Tag>
-      </Link>
-    </div>
-
-    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4, marginTop: 8 }}>
       <Text type="secondary" style={{ fontSize: 11, width: 30, flexShrink: 0 }}>CPU</Text>
       <Progress
         percent={Math.min(c.cpu_percent, 100)}
@@ -93,9 +87,38 @@ const ContainerCard: React.FC<{ c: ContainerInfo }> = ({ c }) => (
   </Card>
 );
 
-const TierSection: React.FC<{ tier: Tier; containers: ContainerInfo[] }> = ({ tier, containers }) => {
-  const meta = tierMeta[tier];
+const GroupSubSection: React.FC<{ group: string; containers: ContainerInfo[] }> = ({ group, containers }) => {
+  const color = groupColors[group] || UNKNOWN_GROUP_COLOR;
   const running = containers.filter((c) => c.status === 'running').length;
+  return (
+    <div style={{ marginBottom: 16, paddingLeft: 12, borderLeft: `3px solid ${color}` }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+        <Link to={`/group/${group}`} style={{ color }}>
+          <Text strong style={{ fontSize: 13, color }}>{group}</Text>
+        </Link>
+        <Text type="secondary" style={{ fontSize: 11, marginLeft: 'auto' }}>
+          {running}/{containers.length} running
+        </Text>
+      </div>
+      <Row gutter={[16, 16]}>
+        {containers.map((c) => (
+          <Col xs={24} sm={12} md={8} lg={6} key={c.name}>
+            <ContainerCard c={c} />
+          </Col>
+        ))}
+      </Row>
+    </div>
+  );
+};
+
+const TierSection: React.FC<{ tier: Tier; groups: string[]; byGroup: Record<string, ContainerInfo[]> }> = ({
+  tier,
+  groups,
+  byGroup,
+}) => {
+  const meta = tierMeta[tier];
+  const all = groups.flatMap((g) => byGroup[g] ?? []);
+  const running = all.filter((c) => c.status === 'running').length;
   return (
     <div style={{ marginBottom: 16 }}>
       <div
@@ -115,40 +138,49 @@ const TierSection: React.FC<{ tier: Tier; containers: ContainerInfo[] }> = ({ ti
           {meta.desc}
         </Text>
         <Text type="secondary" style={{ fontSize: 11, marginLeft: 'auto' }}>
-          {running}/{containers.length} running
+          {running}/{all.length} running
         </Text>
       </div>
-      {containers.length === 0 ? (
+      {all.length === 0 ? (
         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} description="컨테이너 없음" />
       ) : (
-        <Row gutter={[16, 16]}>
-          {containers.map((c) => (
-            <Col xs={24} sm={12} md={8} lg={6} key={c.name}>
-              <ContainerCard c={c} />
-            </Col>
-          ))}
-        </Row>
+        groups
+          .filter((g) => (byGroup[g]?.length ?? 0) > 0)
+          .map((g) => <GroupSubSection key={g} group={g} containers={byGroup[g]} />)
       )}
     </div>
   );
 };
 
 const ContainerCardGrid: React.FC<ContainerCardGridProps> = ({ containers }) => {
-  const byTier = useMemo(() => {
-    const sorted = [...containers].sort((a, b) => {
-      const gi = groupOrder.indexOf(a.group) - groupOrder.indexOf(b.group);
-      if (gi !== 0) return gi;
-      return a.name.localeCompare(b.name);
-    });
-    const buckets: Record<Tier, ContainerInfo[]> = { service: [], platform: [] };
-    for (const c of sorted) buckets[getTier(c.group)].push(c);
-    return buckets;
+  const { byGroup, groupsByTier } = useMemo(() => {
+    const byGroup: Record<string, ContainerInfo[]> = {};
+    for (const c of containers) {
+      (byGroup[c.group] ??= []).push(c);
+    }
+    for (const g of Object.keys(byGroup)) {
+      byGroup[g].sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    const seen = new Set<string>();
+    const orderedGroups: string[] = [];
+    for (const g of groupOrder) {
+      if (byGroup[g]) { orderedGroups.push(g); seen.add(g); }
+    }
+    for (const g of Object.keys(byGroup)) {
+      if (!seen.has(g)) orderedGroups.push(g);
+    }
+
+    const groupsByTier: Record<Tier, string[]> = { service: [], platform: [] };
+    for (const g of orderedGroups) groupsByTier[getTier(g)].push(g);
+
+    return { byGroup, groupsByTier };
   }, [containers]);
 
   return (
     <Card className="dashboard-card" title="Containers" size="small">
       {tierOrder.map((tier) => (
-        <TierSection key={tier} tier={tier} containers={byTier[tier]} />
+        <TierSection key={tier} tier={tier} groups={groupsByTier[tier]} byGroup={byGroup} />
       ))}
     </Card>
   );
