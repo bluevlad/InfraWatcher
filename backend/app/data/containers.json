@@ -3,18 +3,18 @@
   {"name": "allergyinsight-frontend", "group": "AllergyInsight", "port": 4040, "health_path": "/", "health_type": "http"},
   {"name": "allergyinsight-scheduler", "group": "AllergyInsight", "port": null, "health_path": null, "health_type": "docker"},
 
-  {"name": "edufit-ai-crawler", "group": "EduFit", "port": null, "health_path": null, "health_type": "docker"},
-
-  {"name": "standup-app", "group": "Tools", "port": 9060, "health_path": "/api/v1/health", "health_type": "http"},
-  {"name": "newsletterplatform-web", "group": "Tools", "port": 4050, "health_path": "/", "health_type": "http"},
-  {"name": "newsletterplatform-scheduler", "group": "Tools", "port": null, "health_path": null, "health_type": "docker"},
+  {"name": "newsletterplatform-web", "group": "NewsletterPlatform", "port": 4050, "health_path": "/", "health_type": "http"},
+  {"name": "newsletterplatform-scheduler", "group": "NewsletterPlatform", "port": null, "health_path": null, "health_type": "docker"},
 
   {"name": "hopenvision-api", "group": "HopenVision", "port": 9050, "health_path": "/actuator/health", "health_type": "http"},
   {"name": "hopenvision-web", "group": "HopenVision", "port": 4060, "health_path": "/", "health_type": "http"},
   {"name": "hopenvision-admin", "group": "HopenVision", "port": 4061, "health_path": "/", "health_type": "http"},
+  {"name": "edufit-ai-crawler", "group": "HopenVision", "port": null, "health_path": null, "health_type": "docker"},
 
   {"name": "unmong-main", "group": "unmong", "port": 8888, "health_path": "/actuator/health", "health_type": "http"},
   {"name": "unmong-gateway", "group": "unmong", "port": 80, "health_path": "/health", "health_type": "http"},
+
+  {"name": "standup-app", "group": "Standup", "port": 9060, "health_path": "/api/v1/health", "health_type": "http"},
 
   {"name": "postgresql", "group": "DB/Infra", "port": 5432, "health_path": null, "health_type": "tcp"},
   {"name": "mongodb", "group": "DB/Infra", "port": 27017, "health_path": null, "health_type": "tcp"},

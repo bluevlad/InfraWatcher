@@ -89,18 +89,26 @@ InfraWatcher/
 | GET | `/api/healthchecks` | 서비스 헬스체크 결과 |
 | WS | `/ws` | 실시간 대시보드 스냅샷 |
 
-## 모니터링 대상 (24개 컨테이너)
+## 모니터링 대상
+
+### Services (5 그룹)
 
 | 그룹 | 컨테이너 | 포트 |
 |------|----------|------|
-| Academy | academy-admin-back-end, academy-user-back-end | 9001, 9002 |
-| Academy | academy-admin-frontend, academy-user-frontend | 4001, 4002 |
-| AllergyInsight | allergyinsight-backend, frontend, scheduler | 9040, 4040, - |
-| EduFit | edufit-backend, frontend, ai-crawler | 9070, 4070, - |
-| Tools | standup-app, newsletterplatform-web, scheduler | 9060, 4050, - |
-| HopenVision | hopenvision-api, web, admin | 9050, 4060, 4061 |
-| unmong | unmong-main, unmong-gateway | 8888, 80 |
+| AllergyInsight | backend, frontend, scheduler | 9040, 4040, - |
+| NewsletterPlatform | web, scheduler | 4050, - |
+| HopenVision | api, web, admin, edufit-ai-crawler¹ | 9050, 4060, 4061, - |
+| unmong | main, gateway | 8888, 80 |
+| Standup | app | 9060 |
+
+¹ `edufit-ai-crawler`는 HopenVision 서비스의 참고자료 수집용으로 동일 그룹에 편성
+
+### Platform (2 그룹)
+
+| 그룹 | 컨테이너 | 포트 |
+|------|----------|------|
 | DB/Infra | postgresql, mongodb, pgadmin, mongo-express | 5432, 27017, 8882, 8881 |
+| Host Services | ollama, mlx-server | 11434, 11435 |
 
 ## 데이터 흐름
 
