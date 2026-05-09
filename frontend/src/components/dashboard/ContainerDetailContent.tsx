@@ -25,6 +25,10 @@ import {
   fetchContainerMetrics,
   fetchContainerHealthchecks,
 } from '../../services/api';
+import {
+  fetchContainerErrors,
+  type ContainerErrorItem,
+} from '../../services/loganalyzerApi';
 import TimeRangeSelector, {
   type TimeRange,
   getIntervalForRange,
@@ -40,7 +44,44 @@ interface ContainerDetailContentProps {
   snapshot: DashboardSnapshot | null;
   /** Drawer 등에 임베드 시 외부 헤더에 이름이 노출되므로 내부 타이틀 생략 가능 */
   showTitle?: boolean;
+  /** 대시보드 연결 시각(ISO) — LogAnalyzer 에러 since 필터 기준 */
+  connectedAt?: string;
 }
+
+const errorColumns: ColumnsType<ContainerErrorItem> = [
+  {
+    title: 'Time',
+    dataIndex: 'timestamp',
+    key: 'timestamp',
+    width: 170,
+    render: (ts: string) => dayjs(ts).format('YYYY-MM-DD HH:mm:ss'),
+  },
+  {
+    title: 'Severity',
+    dataIndex: 'severity',
+    key: 'severity',
+    width: 100,
+    render: (sev: string) => {
+      const color =
+        sev === 'CRITICAL' ? 'red' : sev === 'HIGH' ? 'orange' : sev === 'MEDIUM' ? 'gold' : 'default';
+      return <Tag color={color}>{sev}</Tag>;
+    },
+  },
+  {
+    title: 'Type',
+    dataIndex: 'error_type',
+    key: 'error_type',
+    width: 140,
+    render: (t: string | null) => t || '-',
+  },
+  {
+    title: 'Message',
+    dataIndex: 'message',
+    key: 'message',
+    ellipsis: true,
+    render: (m: string) => <Text type="danger">{m}</Text>,
+  },
+];
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return '0 B';
@@ -97,6 +138,7 @@ const ContainerDetailContent: React.FC<ContainerDetailContentProps> = ({
   containerName,
   snapshot,
   showTitle = false,
+  connectedAt,
 }) => {
   const [timeRange, setTimeRange] = useState<TimeRange>('1h');
   const [metricsData, setMetricsData] = useState<ContainerMetricPoint[]>([]);
@@ -105,6 +147,10 @@ const ContainerDetailContent: React.FC<ContainerDetailContentProps> = ({
   const [healthPage, setHealthPage] = useState(1);
   const [healthFilter, setHealthFilter] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState(true);
+  const [errorItems, setErrorItems] = useState<ContainerErrorItem[]>([]);
+  const [errorTotal, setErrorTotal] = useState(0);
+  const [errorLoading, setErrorLoading] = useState(false);
+  const [errorUnavailable, setErrorUnavailable] = useState(false);
 
   const container: ContainerInfo | undefined = snapshot?.containers.find(
     (c) => c.name === containerName,
@@ -143,6 +189,24 @@ const ContainerDetailContent: React.FC<ContainerDetailContentProps> = ({
   useEffect(() => {
     loadHealthchecks();
   }, [loadHealthchecks]);
+
+  const loadErrors = useCallback(async () => {
+    setErrorLoading(true);
+    setErrorUnavailable(false);
+    try {
+      const r = await fetchContainerErrors(containerName, connectedAt, 100);
+      setErrorItems(r.items);
+      setErrorTotal(r.total);
+    } catch {
+      setErrorUnavailable(true);
+    } finally {
+      setErrorLoading(false);
+    }
+  }, [containerName, connectedAt]);
+
+  useEffect(() => {
+    loadErrors();
+  }, [loadErrors]);
 
   const cpuColor =
     (container?.cpu_percent ?? 0) > 80
@@ -309,6 +373,52 @@ const ContainerDetailContent: React.FC<ContainerDetailContentProps> = ({
                     }
                     scroll={{ x: 700 }}
                   />
+                </div>
+              ),
+            },
+            {
+              key: 'errors',
+              label: (
+                <span>
+                  Error Log{errorTotal > 0 ? ` (${errorTotal})` : ''}
+                </span>
+              ),
+              children: (
+                <div>
+                  <Space style={{ marginBottom: 12 }}>
+                    <Text type="secondary" style={{ fontSize: 12 }}>
+                      기준: {connectedAt
+                        ? `대시보드 연결 시각 (${dayjs(connectedAt).format('HH:mm:ss')})`
+                        : '최근 24시간'}
+                    </Text>
+                  </Space>
+                  {errorUnavailable ? (
+                    <Text type="warning">
+                      LogAnalyzer 백엔드 응답이 없어 에러 로그를 표시할 수 없습니다.
+                    </Text>
+                  ) : (
+                    <Spin spinning={errorLoading}>
+                      <Table<ContainerErrorItem>
+                        dataSource={errorItems}
+                        columns={errorColumns}
+                        rowKey="id"
+                        size="small"
+                        pagination={{ pageSize: 20, showSizeChanger: false }}
+                        scroll={{ x: 700 }}
+                        locale={{
+                          emptyText: '연결 시각 이후 수집된 에러가 없습니다.',
+                        }}
+                        expandable={{
+                          rowExpandable: (r) => !!r.stack_trace,
+                          expandedRowRender: (r) => (
+                            <pre style={{ fontSize: 11, margin: 0, whiteSpace: 'pre-wrap' }}>
+                              {r.stack_trace}
+                            </pre>
+                          ),
+                        }}
+                      />
+                    </Spin>
+                  )}
                 </div>
               ),
             },

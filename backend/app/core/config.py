@@ -43,6 +43,11 @@ class Settings(BaseSettings):
     JWT_COOKIE_NAME: str = "iw_token"
     SUPER_ADMIN_EMAILS: str = ""  # comma-separated whitelist
 
+    # LogAnalyzer integration — 로그 수집/분석은 LogAnalyzer 백엔드(별도 서비스)가 담당,
+    # InfraWatcher는 thin proxy로 화면 통합만 수행. 사내망에서 OrbStack 컨테이너 이름으로 직결.
+    LOGANALYZER_BASE_URL: str = "http://loganalyzer-backend:9092"
+    LOGANALYZER_TIMEOUT: float = 5.0
+
     @property
     def admin_email_set(self) -> set[str]:
         return {e.strip().lower() for e in self.SUPER_ADMIN_EMAILS.split(",") if e.strip()}

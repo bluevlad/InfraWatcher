@@ -8,12 +8,15 @@ const { Text } = Typography;
 interface ContainerDetailDrawerProps {
   containerName: string | null;
   snapshot: DashboardSnapshot | null;
+  /** 대시보드 연결 시각 — LogAnalyzer 에러 since 필터 기준 */
+  connectedAt?: string;
   onClose: () => void;
 }
 
 const ContainerDetailDrawer: React.FC<ContainerDetailDrawerProps> = ({
   containerName,
   snapshot,
+  connectedAt,
   onClose,
 }) => {
   const container = containerName
@@ -44,7 +47,11 @@ const ContainerDetailDrawer: React.FC<ContainerDetailDrawerProps> = ({
       destroyOnClose
     >
       {containerName && (
-        <ContainerDetailContent containerName={containerName} snapshot={snapshot} />
+        <ContainerDetailContent
+          containerName={containerName}
+          snapshot={snapshot}
+          connectedAt={connectedAt}
+        />
       )}
     </Drawer>
   );

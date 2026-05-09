@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Space, Spin, Typography } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 import SystemSummary from '../components/dashboard/SystemSummary';
+import LogAnalyzerSummary from '../components/dashboard/LogAnalyzerSummary';
 import ContainerCardGrid from '../components/dashboard/ContainerCardGrid';
 import HealthCheckPanel from '../components/dashboard/HealthCheckPanel';
 import ContainerDetailDrawer from '../components/dashboard/ContainerDetailDrawer';
@@ -22,6 +23,8 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ snapshot }) => {
   const [healthChecks, setHealthChecks] = useState<HealthCheckResult[]>([]);
   const [loading, setLoading] = useState(true);
   const [lastUpdate, setLastUpdate] = useState<string>('');
+  // 대시보드 연결 시각 — LogAnalyzer 에러 조회의 since 기준
+  const [connectedAt] = useState<string>(() => new Date().toISOString());
 
   // Initial load via REST
   useEffect(() => {
@@ -122,6 +125,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ snapshot }) => {
         </Text>
       </div>
       <SystemSummary system={system} summary={summary} />
+      <LogAnalyzerSummary />
       <ContainerCardGrid
         containers={containers}
         onContainerClick={handleContainerClick}
@@ -132,6 +136,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ snapshot }) => {
       <ContainerDetailDrawer
         containerName={openContainer}
         snapshot={snapshot}
+        connectedAt={connectedAt}
         onClose={() => updateParam('container', null)}
       />
       <GroupDetailDrawer

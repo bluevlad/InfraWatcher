@@ -14,7 +14,7 @@ from app.services.docker_service import _get_client
 
 logger = logging.getLogger(__name__)
 
-Action = Literal["start", "restart"]
+Action = Literal["start", "restart", "loganalyzer.qa-push", "loganalyzer.standup-report"]
 
 
 async def _record_audit(
@@ -114,6 +114,18 @@ async def perform_container_action(
         "status": new_status,
         "duration_ms": duration_ms,
     }
+
+
+async def record_admin_audit(
+    user_email: str,
+    action: Action,
+    target: str,
+    success: bool,
+    error: str | None,
+    duration_ms: int,
+) -> None:
+    """컨테이너 외 관리자 액션(LogAnalyzer 수동 트리거 등) 감사 로그 공개 헬퍼."""
+    await _record_audit(user_email, action, target, success, error, duration_ms)
 
 
 async def list_audit_log(limit: int = 100) -> list[dict]:
