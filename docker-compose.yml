@@ -19,6 +19,9 @@ services:
       - IW_JWT_SECRET=${IW_JWT_SECRET:-change-me-in-production}
       - IW_JWT_EXPIRE_MINUTES=${IW_JWT_EXPIRE_MINUTES:-480}
       - IW_SUPER_ADMIN_EMAILS=${IW_SUPER_ADMIN_EMAILS:-}
+      # LogAnalyzer thin proxy 대상 — 다른 docker network이라 host.docker.internal 경유
+      - IW_LOGANALYZER_BASE_URL=${IW_LOGANALYZER_BASE_URL:-http://host.docker.internal:9092}
+      - IW_LOGANALYZER_TIMEOUT=${IW_LOGANALYZER_TIMEOUT:-5.0}
     extra_hosts:
       - "host.docker.internal:host-gateway"
 

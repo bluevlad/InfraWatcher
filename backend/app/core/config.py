@@ -44,8 +44,10 @@ class Settings(BaseSettings):
     SUPER_ADMIN_EMAILS: str = ""  # comma-separated whitelist
 
     # LogAnalyzer integration — 로그 수집/분석은 LogAnalyzer 백엔드(별도 서비스)가 담당,
-    # InfraWatcher는 thin proxy로 화면 통합만 수행. 사내망에서 OrbStack 컨테이너 이름으로 직결.
-    LOGANALYZER_BASE_URL: str = "http://loganalyzer-backend:9092"
+    # InfraWatcher는 thin proxy로 화면 통합만 수행.
+    # 두 서비스가 서로 다른 docker network(infrawatcher_default vs loganalyzer_default)에 있으므로
+    # 헬스체크와 동일하게 host.docker.internal로 호스트 published port를 경유 (extra_hosts 설정 필요).
+    LOGANALYZER_BASE_URL: str = "http://host.docker.internal:9092"
     LOGANALYZER_TIMEOUT: float = 5.0
 
     @property
