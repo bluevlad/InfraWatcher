@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Space, Spin, Typography } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 import SystemSummary from '../components/dashboard/SystemSummary';
-import LogAnalyzerSummary from '../components/dashboard/LogAnalyzerSummary';
+import RealtimeErrorFeed from '../components/dashboard/RealtimeErrorFeed';
 import ContainerCardGrid from '../components/dashboard/ContainerCardGrid';
 import HealthCheckPanel from '../components/dashboard/HealthCheckPanel';
 import ContainerDetailDrawer from '../components/dashboard/ContainerDetailDrawer';
@@ -125,7 +125,7 @@ const DashboardPage: React.FC<DashboardPageProps> = ({ snapshot }) => {
         </Text>
       </div>
       <SystemSummary system={system} summary={summary} />
-      <LogAnalyzerSummary />
+      <RealtimeErrorFeed onContainerClick={handleContainerClick} />
       <ContainerCardGrid
         containers={containers}
         onContainerClick={handleContainerClick}

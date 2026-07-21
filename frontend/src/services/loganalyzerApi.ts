@@ -7,19 +7,6 @@ const api = axios.create({
   withCredentials: true,
 });
 
-export interface IntegrationSummary {
-  github: { issued_count: number; auto_trigger: string; note: string };
-  qa_dashboard: { pending_open_count: number };
-  standup: { pending_resolved_count: number };
-  totals: {
-    critical: number;
-    high: number;
-    medium: number;
-    low: number;
-    total_errors: number;
-  };
-}
-
 export interface ContainerErrorItem {
   id: number;
   timestamp: string;
@@ -39,14 +26,21 @@ export interface ContainerErrorsResponse {
   items: ContainerErrorItem[];
 }
 
-export interface IntegrationActionResult {
-  status: string; // 'sent' | 'no_data' | 'failed'
-  groups_count?: number;
-  message?: string;
+export interface LiveErrorsResponse {
+  since: string | null;
+  hours_window: number;
+  total: number;
+  severity_counts: { critical: number; high: number; medium: number; low: number };
+  items: ContainerErrorItem[];
 }
 
-export async function fetchIntegrationSummary(): Promise<IntegrationSummary> {
-  const { data } = await api.get<IntegrationSummary>('/integration-summary');
+export async function fetchLiveErrors(
+  since?: string,
+  limit = 30,
+): Promise<LiveErrorsResponse> {
+  const { data } = await api.get<LiveErrorsResponse>('/live-errors', {
+    params: { since, limit },
+  });
   return data;
 }
 
@@ -58,15 +52,5 @@ export async function fetchContainerErrors(
   const { data } = await api.get<ContainerErrorsResponse>('/errors', {
     params: { container, since, limit },
   });
-  return data;
-}
-
-export async function pushQaDashboard(): Promise<IntegrationActionResult> {
-  const { data } = await api.post<IntegrationActionResult>('/qa-push');
-  return data;
-}
-
-export async function reportStandup(): Promise<IntegrationActionResult> {
-  const { data } = await api.post<IntegrationActionResult>('/standup-report');
   return data;
 }

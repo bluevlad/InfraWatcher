@@ -1,33 +1,30 @@
 export const groupColors: Record<string, string> = {
   AllergyInsight: '#722ed1',
+  SkillRadar: '#52c41a',
   NewsletterPlatform: '#fa8c16',
-  HopenVision: '#eb2f96',
   unmong: '#2f54eb',
-  Standup: '#13c2c2',
-  'DB/Infra': '#8c8c8c',
-  'Host Services': '#d4380d',
+  DB: '#8c8c8c',
+  LLM: '#d4380d',
 };
 
 export const groupOrder = [
   'AllergyInsight',
+  'SkillRadar',
   'NewsletterPlatform',
-  'HopenVision',
   'unmong',
-  'Standup',
-  'DB/Infra',
-  'Host Services',
+  'DB',
+  'LLM',
 ];
 
 export type Tier = 'service' | 'platform';
 
 export const groupTier: Record<string, Tier> = {
   AllergyInsight: 'service',
+  SkillRadar: 'service',
   NewsletterPlatform: 'service',
-  HopenVision: 'service',
   unmong: 'service',
-  Standup: 'service',
-  'DB/Infra': 'platform',
-  'Host Services': 'platform',
+  DB: 'platform',
+  LLM: 'platform',
 };
 
 export const tierOrder: Tier[] = ['service', 'platform'];
@@ -35,12 +32,12 @@ export const tierOrder: Tier[] = ['service', 'platform'];
 export const tierMeta: Record<Tier, { label: string; desc: string; accent: string }> = {
   service: {
     label: 'Services',
-    desc: '사용자 서비스 그룹 — 장애 시 비즈니스 영향 직결',
+    desc: '실시간 관제 대상 서비스 — 장애 시 비즈니스 영향 직결',
     accent: '#1677ff',
   },
   platform: {
     label: 'Platform',
-    desc: '공유 인프라 — DB · Local LLM · Host · Agents',
+    desc: '공유 인프라 — DB · LLM',
     accent: '#8c8c8c',
   },
 };

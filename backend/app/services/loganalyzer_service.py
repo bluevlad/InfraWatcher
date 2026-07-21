@@ -40,17 +40,6 @@ async def _get(path: str, params: dict[str, Any] | None = None) -> Any:
             raise LogAnalyzerUnavailable(str(exc)) from exc
 
 
-async def _post(path: str, params: dict[str, Any] | None = None) -> Any:
-    async with _client() as cli:
-        try:
-            r = await cli.post(path, params=params)
-            r.raise_for_status()
-            return r.json()
-        except (httpx.HTTPError, httpx.TimeoutException) as exc:
-            logger.warning("LogAnalyzer POST %s failed: %s", path, exc)
-            raise LogAnalyzerUnavailable(str(exc)) from exc
-
-
 async def get_health() -> dict[str, Any]:
     return await _get("/api/health")
 
@@ -77,11 +66,3 @@ async def get_error_list(
         "/api/errors/list",
         {"hours": hours, "page": 1, "page_size": page_size},
     )
-
-
-async def push_qa_dashboard() -> dict[str, Any]:
-    return await _post("/api/integration/qa-dashboard")
-
-
-async def report_standup() -> dict[str, Any]:
-    return await _post("/api/integration/standup")
