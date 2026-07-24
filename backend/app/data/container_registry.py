@@ -14,6 +14,7 @@ class ContainerConfig:
     health_path: str | None
     health_type: str  # "http", "tcp", "docker"
     host: str | None = None  # None = use default HEALTHCHECK_HOST
+    match: str | None = None  # http 전용: 응답 본문에 이 문자열이 없으면 unhealthy
 
 
 def _load_containers() -> list[ContainerConfig]:

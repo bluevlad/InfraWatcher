@@ -23,5 +23,6 @@
   {"name": "llmops-backend", "group": "LLM", "port": 9110, "health_path": "/api/health", "health_type": "http"},
   {"name": "llmops-frontend", "group": "LLM", "port": 4110, "health_path": "/", "health_type": "http"},
   {"name": "ollama", "group": "LLM", "port": 11434, "health_path": "/api/tags", "health_type": "http"},
-  {"name": "mlx-server", "group": "LLM", "port": 11435, "health_path": "/v1/models", "health_type": "http"}
+  {"name": "mlx-server", "group": "LLM", "port": 11435, "health_path": "/v1/models", "health_type": "http"},
+  {"name": "gemma", "group": "LLM", "port": 11434, "health_path": "/api/tags", "health_type": "http", "match": "gemma"}
 ]

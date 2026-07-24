@@ -22,6 +22,10 @@ async def _check_http(config: ContainerConfig, host: str, timeout: float) -> Hea
             resp = await client.get(url)
             elapsed = (time.monotonic() - start) * 1000
             status = "healthy" if resp.status_code < 500 else "unhealthy"
+            error = None
+            if status == "healthy" and config.match and config.match not in resp.text:
+                status = "unhealthy"
+                error = f"response body missing '{config.match}'"
             return HealthCheckResult(
                 container_name=config.name,
                 group=config.group,
@@ -31,7 +35,7 @@ async def _check_http(config: ContainerConfig, host: str, timeout: float) -> Hea
                 status=status,
                 response_time_ms=round(elapsed, 1),
                 status_code=resp.status_code,
-                error=None,
+                error=error,
                 checked_at=datetime.now(timezone.utc).isoformat(),
             )
     except Exception as e:
