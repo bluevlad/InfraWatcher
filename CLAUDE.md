@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-> 도메인/URL/포트 규칙: [DOMAIN_MANAGEMENT.md](https://github.com/bluevlad/Claude-Opus-bluevlad/blob/main/standards/infrastructure/DOMAIN_MANAGEMENT.md) — `https://도메인:포트` 사용 금지
+> 도메인/URL/포트 규칙: [DOMAIN_MANAGEMENT.md](https://github.com/bluevlad/Ai-Legacy-bluevlad/blob/main/standards/infrastructure/DOMAIN_MANAGEMENT.md) — `https://도메인:포트` 사용 금지
 
 ## 실행 환경 감지 (SSH 재접속 금지)
 
@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Docker 명령은 현재 호스트에서 바로 실행 (별도 SSH 접속 불필요)
 - compose 파일 선택: Darwin → `docker-compose.yml` / Windows → `docker-compose.local.yml`
 
-> 3-머신 작업 환경(MacBook 편집·운영 / Desktop 터미널·AutoQA / Notebook TIPAIP2 격리) 규칙: [WORKSTATION_GUIDE.md](https://github.com/bluevlad/Claude-Opus-bluevlad/blob/main/infrastructure/environments/WORKSTATION_GUIDE.md) — 개인 서비스 편집은 MacBook 에서만, Desktop 은 pull-only
+> 3-머신 작업 환경(MacBook 편집·운영 / Desktop 터미널·AutoQA / Notebook TIPAIP2 격리) 규칙: [WORKSTATION_GUIDE.md](https://github.com/bluevlad/Ai-Legacy-bluevlad/blob/main/infrastructure/environments/WORKSTATION_GUIDE.md) — 개인 서비스 편집은 MacBook 에서만, Desktop 은 pull-only
 
 ## Project Overview
 
@@ -27,7 +27,7 @@ InfraWatcher - Docker 컨테이너 모니터링 및 인프라 상태 대시보�
 
 ## Git Workflow (필수)
 
-> 표준: [FEATURE_BRANCH_LIFECYCLE.md](https://github.com/bluevlad/Claude-Opus-bluevlad/blob/main/standards/git/FEATURE_BRANCH_LIFECYCLE.md) · [MAIN_PROD_WORKFLOW.md](https://github.com/bluevlad/Claude-Opus-bluevlad/blob/main/standards/git/MAIN_PROD_WORKFLOW.md) · [BRANCH_CONVENTION.md](https://github.com/bluevlad/Claude-Opus-bluevlad/blob/main/standards/git/BRANCH_CONVENTION.md) · [COMMIT_CONVENTION.md](https://github.com/bluevlad/Claude-Opus-bluevlad/blob/main/standards/git/COMMIT_CONVENTION.md)
+> 표준: [FEATURE_BRANCH_LIFECYCLE.md](https://github.com/bluevlad/Ai-Legacy-bluevlad/blob/main/standards/git/FEATURE_BRANCH_LIFECYCLE.md) · [MAIN_PROD_WORKFLOW.md](https://github.com/bluevlad/Ai-Legacy-bluevlad/blob/main/standards/git/MAIN_PROD_WORKFLOW.md) · [BRANCH_CONVENTION.md](https://github.com/bluevlad/Ai-Legacy-bluevlad/blob/main/standards/git/BRANCH_CONVENTION.md) · [COMMIT_CONVENTION.md](https://github.com/bluevlad/Ai-Legacy-bluevlad/blob/main/standards/git/COMMIT_CONVENTION.md)
 > InfraWatcher는 **`main` SSoT + `prod` 배포 트리거** 모델을 사용 (서비스 repo 라이프사이클 적용 대상)
 
 ### 5단계 라이프사이클 (코드 변경 동반 작업 시 필수)
@@ -79,8 +79,8 @@ git log --oneline -3                # 최근 컨텍스트
 
 ## Help Page 관리
 
-> 작성 표준: [HELP_PAGE_GUIDE.md](https://github.com/bluevlad/Claude-Opus-bluevlad/blob/main/standards/documentation/HELP_PAGE_GUIDE.md)
-> HTML 템플릿: [help-page-template.html](https://github.com/bluevlad/Claude-Opus-bluevlad/blob/main/standards/documentation/templates/help-page-template.html)
+> 작성 표준: [HELP_PAGE_GUIDE.md](https://github.com/bluevlad/Ai-Legacy-bluevlad/blob/main/standards/documentation/HELP_PAGE_GUIDE.md)
+> HTML 템플릿: [help-page-template.html](https://github.com/bluevlad/Ai-Legacy-bluevlad/blob/main/standards/documentation/templates/help-page-template.html)
 
 - **기능 추가/변경/삭제 시 반드시 헬프 페이지도 함께 업데이트**
 - 헬프 파일 위치: `frontend/public/help/`
